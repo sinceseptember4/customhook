@@ -6,9 +6,12 @@ import { User } from "./types/api/user";
 
 export default function App() {
   const [UserProfiles, setUserProfiles] = useState<Array<UserProfile>>([]);
-  const [loading, setLoding] = useState(true);
+  const [loading, setLoding] = useState(false);
   const [error, setError] = useState(false);
   const FetchUser = () => {
+    setLoding(true);
+    setError(false);
+
     axios
       .get<Array<User>>("https://jsonplaceholder.typicode.com/users")
       .then((res) => {
@@ -27,20 +30,22 @@ export default function App() {
         setLoding(false);
       });
   };
+
   return (
     <div className="App">
       <button onClick={FetchUser}>データー取得</button>
-      <br/>
+      <br />
       {error ? (
-        <p style={{ color: "red"}}>データの取得に失敗しました</p>
+        <p style={{ color: "red" }}>データの取得に失敗しました</p>
       ) : loading ? (
         <p>Loading...</p>
       ) : (
         <>
-      {UserProfiles.map((user) => (
-        <UserCard key={user.id} user={user} />
-      ))}
-      </>
-
+          {UserProfiles.map((user) => (
+            <UserCard key={user.id} user={user} />
+          ))}
+        </>
+      )}
+    </div>
   );
 }
